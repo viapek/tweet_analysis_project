@@ -9,6 +9,10 @@ I sleep.
 import time
 import urllib2 as urllib
 
+#set some defaults
+i_DefaultSeconds = 300
+s_TargetWeb = "google.com"
+
 def getHTMLTitle(s):
     # take a urllib2.open results and get the contents of <title></title>
     return s[s.find("<title>") + len("<title>"):s.find("</title>")]
@@ -32,8 +36,11 @@ def sleeper():
             print site,": ",getHTMLTitle(res.read())," retrieved in ", time.clock()-start_time
     
 # Get user input
-num = input('How long to wait: ')
- 
+try:
+    num = input('How long to wait: [{0}] '.format(i_DefaultSeconds))
+except SyntaxError:
+    num = i_DefaultSeconds
+
 # Try to convert it to a float
 while True:
     try:
@@ -45,8 +52,12 @@ while True:
         break
     
 # get address
-site = raw_input("Please enter a site address to call: ")
+site = raw_input("Please enter a site address to call: [{0}]".format(s_TargetWeb))
+if site == '':
+    site = s_TargetWeb
+
 # simple url prep
+
 if not site.startswith('http'):
     site = "http://" + site
  
