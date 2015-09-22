@@ -51,7 +51,7 @@ ary_PlannedActions = []
 client = MongoClient(config.s_MongoDBHost, config.i_MongoDBPort)
 m_Dbase = client[config.s_Dbase]
 #get a list of all the collections without systyem collections
-tw_Collections = m_Dbase.collection_names(False)
+tw_Collections = sorted(m_Dbase.collection_names(False))
 
 if config.debug:
     print "Start iterating through tw_Collections with {0} items".format(len(tw_Collections))

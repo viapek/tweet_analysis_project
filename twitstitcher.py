@@ -115,7 +115,7 @@ def stitchCollections(m_Dbase, c_suffix):
     to_Collection = ""
     
     #get the collections
-    tw_Collections = m_Dbase.collection_names()
+    tw_Collections = sorted(m_Dbase.collection_names(False))
     if debug:
         print "Start iterating through tw_Collections with {0} items".format(len(tw_Collections))
     for collection in tw_Collections:
@@ -170,4 +170,8 @@ if __name__ == '__main__':
         print "Can't Authenticate"
         sys.exit(-1)
 
-    print stitchCollections(db,config.s_colSuffix)
+    ret = stitchCollections(db,config.s_colSuffix)
+
+    for action in ret:
+        print action
+    
