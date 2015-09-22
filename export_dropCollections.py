@@ -7,6 +7,10 @@ from pymongo import MongoClient
 #initiate counters at 0
 i_DropCounter = 0
 i_ExportCounter = 0
+i_TotalDataSize = 0
+i_TotalCollectionDataSize = 0
+
+
 while True:
     d_OfflineToHere = raw_input("Please enter a date (MMDD). All Collections up to AND including this date will be effected. GMT[{0}]".format(time.strftime('%m%d', time.gmtime())))
 
@@ -52,16 +56,26 @@ tw_Collections = m_Dbase.collection_names(False)
 if config.debug:
     print "Start iterating through tw_Collections with {0} items".format(len(tw_Collections))
 for collection in tw_Collections:
+
     if config.debug:
         print "Working with {0}".format(collection)
         print "-"*50
-    if not collection.endswith(config.s_colSuffix): #if it ain't matching our collection suffix, skip it
+    if not collection.endswith((config.s_colSuffix,config.s_StitchSuffix)): #if it ain't matching our collection suffix, skip it
         ary_PlannedActions.append("Don't care about {0} because it doesn't match suffix {1}".format(collection,config.s_colSuffix))
         if config.debug:
             print "- suffix not {0}".format(config.s_colSuffix)
         continue
-        
+
+    #check that we can convert our date stamp into an int for comparison
+    try:
+        int(collection[0:4])
+    except:
+        continue
+            
     if int(collection[0:4]) <= int(d_OfflineToHere):
+        #add up the total amout of collection size 
+        i_TotalCollectionDataSize += m_Dbase.command("collstats", collection)["size"]    
+
         if config.debug:
             print "|  Got a handle on {0}".format(collection)
         
@@ -73,7 +87,8 @@ for collection in tw_Collections:
         if b_Export:
             s_ExportCommand = "mongodump -u {0} -p {1} -d {2} -c {3} -o {4}".format(
                     config.s_MongoUser,config.s_MongoPassword,config.s_Dbase, collection, config.s_OfflineCollectionPath)
-            print s_ExportCommand
+            if config.debug:
+                print s_ExportCommand
             proc = subprocess.Popen(s_ExportCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 
             if proc.wait() == 0:
@@ -90,12 +105,11 @@ for collection in tw_Collections:
                         
                 if [s for s in line.split() if s.endswith('bson')]:
                     i_FileSizeBefore = os.stat(s).st_size/1024
-                  
+                    i_TotalDataSize += i_FileSizeBefore
                     s_GZipCommand = "gzip -9 {0}".format(s)
-                    print s_GZipCommand
-                    
-                    
+
                     if config.debug:
+                        print s_GZipCommand
                         print "File {0} exported. File size was {1}kB".format(s,i_FileSizeBefore)    
         
             ary_PlannedActions.append("Exported {0} to {1}. Size before compression: {2}kB".format(collection,config.s_OfflineCollectionPath+"/"+config.s_Dbase,i_FileSizeBefore))
@@ -113,10 +127,15 @@ for collection in tw_Collections:
             if not b_DropOK:
                 ary_PlannedActions.append("Did not drop {0} as export failed".format(collection))
 
-print ary_PlannedActions,"\n"
+for action in ary_PlannedActions:
+    print action
+    
 print "{0} collections evaluated. \n".format(len(tw_Collections))
 if b_Drop:
     print "- {0} successfully dropped.".format(i_DropCounter)
 if b_Export:
     print "- {0} successfully exported.".format(i_ExportCounter)
+
+print "- Total collection data size: {0}".format(i_TotalCollectionDataSize)
+print "- Total data written: {0}".format(i_TotalDataSize)
 print "\n"

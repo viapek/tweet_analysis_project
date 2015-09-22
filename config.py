@@ -1,10 +1,11 @@
 # set some variables
 s_Dbase = "twitter"
 s_colSuffix = "rwc"
+s_StitchSuffix = "stitch"
 i_MaxCollectionSize = 50000000
 
 s_MongoUser = "jeremy"
-s_MongoPasword = "L3tm31n!"
+s_MongoPassword = "L3tm31n!"
 s_MongoDBHost = "localhost"
 i_MongoDBPort = 27017
 
@@ -20,4 +21,4 @@ access_token_secret = "KnR9TisLFBk5UGxh6wAeNRIVvAkPQqvMKF06fdcfx95Wv"
 s_OfflineCollectionPath = "~/rwc"
 
 _debug = 0
-debug = True
+debug = False
