@@ -3,6 +3,8 @@ s_Dbase = "twitter"
 s_colSuffix = "rwc"
 i_MaxCollectionSize = 50000000
 
+s_MongoUser = "jeremy"
+s_MongoPasword = "L3tm31n!"
 s_MongoDBHost = "localhost"
 i_MongoDBPort = 27017
 
@@ -14,4 +16,8 @@ api_secret = "MEq9KwfdgaQwX9KPYIHLHoVIi9GDxwUVVfdPbzCQJresfFWVkl"
 access_token_key = "331380610-GVQfgsUf6MUVUCtJYX7VCffjI22marVlXlJOapJK"
 access_token_secret = "KnR9TisLFBk5UGxh6wAeNRIVvAkPQqvMKF06fdcfx95Wv"
 
+# set destination for offline collection storage
+s_OfflineCollectionPath = "~/rwc"
+
 _debug = 0
+debug = True
