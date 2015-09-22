@@ -33,7 +33,7 @@ def sleeper():
             print e
             pass
         else:
-            print site,": ",getHTMLTitle(res.read())," retrieved in ", time.clock()-start_time
+            print site,": ",getHTMLTitle(res.read())," retrieved at ", time.ctime().split()[3], " in ", time.clock()-start_time
     
 # Get user input
 try:
