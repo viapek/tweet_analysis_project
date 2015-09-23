@@ -18,7 +18,11 @@ access_token_key = "331380610-GVQfgsUf6MUVUCtJYX7VCffjI22marVlXlJOapJK"
 access_token_secret = "KnR9TisLFBk5UGxh6wAeNRIVvAkPQqvMKF06fdcfx95Wv"
 
 # set destination for offline collection storage
-s_OfflineCollectionPath = "~/rwc"
+s_OfflineCollectionPath = "/home/jeremy/rwc"
+
+# set working database for imports and analysis
+s_WorkingDatabase = "working"
+s_WorkingCollection = "working_rwc"
 
 _debug = 0
 debug = False

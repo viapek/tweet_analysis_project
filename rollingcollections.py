@@ -81,11 +81,13 @@ def fetchsamples():
           try:
               lineJson = json.loads(line)
           except (ValueError, KeyError, TypeError) as e:
-              print "Problem with json.loads"
-              print "-"*50
-              print line
-              print "-"*50
-              pass
+              if len(line) != 2:
+                  print "Problem with json.loads"
+                  print "-"*50
+                  print "line length: {0}".format(len(line))
+                  print "line data: {0}".format(line)
+                  print "-"*50
+                  pass
           else:
               writeToDbase(lineJson)
 
