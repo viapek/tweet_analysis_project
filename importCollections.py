@@ -87,8 +87,8 @@ def doMongoImport(s_filesrc):
   #excute the command and get feedback
   proc = subprocess.Popen(s_ImportCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-  #for line in proc.stdout.readlines():
-  #    print line
+  for line in proc.stdout.readlines():
+      print line
 
   if proc.wait() == 0:
     #if the return code is 0 we can go 
@@ -102,16 +102,29 @@ def doMongoImport(s_filesrc):
               
 
 if __name__ == '__main__':
-  #setup an array for tracking actions
-  range = getUserInput()
-
-  ary_PlannedActions = []
-    
+  #TODO get a the range of dates of files from the import directory to aid range selection and print it to screen
   files = sorted(getFileListByExtn("bson.gz"))
+  s_prevPreFix = []
+  for f in files:
+      ary_File = f.split("/")
+      s_curPreFix = ary_File[len(ary_File)-1][0:4] 
+      if not s_curPreFix in s_prevPreFix:
+          s_prevPreFix.append(s_curPreFix)
+          
+  print "The range of possible dates: {0}".format(s_prevPreFix)
+  
+  
+  #setup an array for tracking actions
+  ary_PlannedActions = []
+
+  range = getUserInput()
     
   for f in files:
 
-    if int(f.split("/")[5][0:4]) >= int(range[0]) and int(f.split("/")[5][0:4]) <= int(range[1]):
+    ary_File = f.split("/")
+    i_curPreFix = int(ary_File[len(ary_File)-1][0:4])
+
+    if i_curPreFix >= int(range[0]) and i_curPreFix <= int(range[1]):
       #create our gzip string
       if GZip(f, False):
         i_UnzipCounter += 1
@@ -127,7 +140,7 @@ if __name__ == '__main__':
         
     else:
       if config.debug:
-        print "{0} is out of range {1}".format(int(f.split("/")[5][0:4]),range)
+        print "{0} is out of range {1}".format(i_curPreFix,range)
        
             
   if config.debug:

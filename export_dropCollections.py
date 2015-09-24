@@ -59,14 +59,24 @@ def getUserInput():
     return False
 
 if __name__ == '__main__':
-  #setup an array for tracking actions
-  if getUserInput():
-    ary_PlannedActions = []
-    # get a hook on the database
-    client = MongoClient(config.s_MongoDBHost, config.i_MongoDBPort)
-    m_Dbase = client[config.s_Dbase]
+
+  client = MongoClient(config.s_MongoDBHost, config.i_MongoDBPort)
+  m_Dbase = client[config.s_Dbase]
     #get a list of all the collections without systyem collections
-    tw_Collections = sorted(m_Dbase.collection_names(False))
+  tw_Collections = sorted(m_Dbase.collection_names(False))
+
+  s_prevPreFix = []
+  for f in tw_Collections:  
+    if not f[0:4] in s_prevPreFix:
+      s_prevPreFix.append(f[0:4])
+          
+  print "The range of possible dates: "
+  for s_range in s_prevPreFix:
+      print "{0}".format(s_range)    
+
+  if getUserInput():
+    #setup an array for tracking actions
+    ary_PlannedActions = []
 
     if config.debug: 
       print "Start iterating through tw_Collections with {0} items".format(len(tw_Collections))
@@ -188,9 +198,7 @@ if __name__ == '__main__':
           if not b_DropOK:
             ary_PlannedActions.append("Did not drop {0} as export failed".format(collection))
     
-    if config.debug:
-        for l in ary_PlannedActions:
-            print l
+    print ary_PlannedActions,"\n"
     print "{0} collections evaluated. \n".format(len(tw_Collections))
     if b_Drop:
       print "- {0} successfully dropped.".format(i_DropCounter) 
