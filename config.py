@@ -23,6 +23,8 @@ s_OfflineCollectionPath = "/home/jeremy/rwc"
 # set working database for imports and analysis
 s_WorkingDatabase = "working"
 s_WorkingCollection = "working_rwc"
+s_WorkingResults = "working_rwc_results"
+
 
 _debug = 0
-debug = False
+debug = True
