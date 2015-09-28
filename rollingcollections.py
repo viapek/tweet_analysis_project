@@ -2,6 +2,7 @@ import config
 import oauth2 as oauth
 import urllib2 as urllib
 import json
+import traceback
 from pymongo import MongoClient
 from time import gmtime, strftime
 """
@@ -93,3 +94,4 @@ def fetchsamples():
 
 if __name__ == '__main__':
   fetchsamples()
+  print traceback.print_stack()

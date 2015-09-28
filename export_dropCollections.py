@@ -198,7 +198,9 @@ if __name__ == '__main__':
           if not b_DropOK:
             ary_PlannedActions.append("Did not drop {0} as export failed".format(collection))
     
-    print ary_PlannedActions,"\n"
+    if config.debug:
+      print ary_PlannedActions,"\n"
+      
     print "{0} collections evaluated. \n".format(len(tw_Collections))
     if b_Drop:
       print "- {0} successfully dropped.".format(i_DropCounter) 
