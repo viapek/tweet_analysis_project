@@ -1,30 +1,38 @@
-# set some variables
-s_Dbase = "twitter"
-s_colSuffix = "rwc"
-s_StitchSuffix = "stitch"
+# set global some variables
+
+s_Dbase = "yourDBasename"
+# a suffix will be added to each collection so different projects can be isolated
+s_colSuffix = "suffix"
+# if there are network issues twitstitcher will use the search api to try to fill the gap
+# these collections will have this suffix for id purposes
+s_StitchSuffix = "suffix"
+# this is the max size of the mongo collections. When this is exceeded a new collection is started
 i_MaxCollectionSize = 50000000
 
-s_MongoUser = "jeremy"
-s_MongoPassword = "L3tm31n!"
-s_MongoDBHost = "localhost"
+# mongo user credentials
+s_MongoUser = ""
+s_MongoPassword = ""
+s_MongoDBHost = ""
 i_MongoDBPort = 27017
 
-s_TwitQueryString = "'rwc2015,rugby,world%20cup'"
+# this is sent with the api request
+s_TwitQueryString = ""
 
 # twitter api and access tokens
-api_key = "I8EM3dFelgnML1tlXsl0r4UiO"
-api_secret = "MEq9KwfdgaQwX9KPYIHLHoVIi9GDxwUVVfdPbzCQJresfFWVkl"
-access_token_key = "331380610-GVQfgsUf6MUVUCtJYX7VCffjI22marVlXlJOapJK"
-access_token_secret = "KnR9TisLFBk5UGxh6wAeNRIVvAkPQqvMKF06fdcfx95Wv"
+api_key = ""
+api_secret = ""
+access_token_key = ""
+access_token_secret = ""
 
 # set destination for offline collection storage
-s_OfflineCollectionPath = "/home/jeremy/rwc"
+s_OfflineCollectionPath = ""
 
 # set working database for imports and analysis
-s_WorkingDatabase = "working"
-s_WorkingCollection = "working_rwc"
-s_WorkingResults = "working_rwc_results"
+s_WorkingDatabase = ""
+s_WorkingCollection = ""
+s_WorkingResults = ""
 
 
 _debug = 0
+# if this is true then scripts will print progressto help identify issues
 debug = False
