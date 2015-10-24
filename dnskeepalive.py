@@ -6,6 +6,7 @@ and the time it took to retrieve the page.
 I have written this to as a hack to keep my network interface active while
 I sleep.
 """
+import logging
 import time
 import urllib2 as urllib
 
@@ -13,68 +14,34 @@ import urllib2 as urllib
 i_DefaultSeconds = 300
 s_TargetWeb = "google.com"
 
-observers = []
-
 def getHTMLTitle(s):
     # take a urllib2.open results and get the contents of <title></title>
     return s[s.find("<title>") + len("<title>"):s.find("</title>")]
 
  
 def poller():
+    global num, site
+
     while True:
+        if not num:
+            num = i_DefaultSeconds
+        if not site:
+            site = s_TargetWeb
         # Run our time.sleep() command,
         # and show the before and after time
-        print('Waiting %s seconds' % num)
+        logging.debug('Waiting %d seconds before download', num)
         time.sleep(num)
 
         start_time = time.clock()
         try:
             res = urllib.urlopen(site)
         except (ValueError, KeyError, TypeError) as e:
-            print "error - "
-            print e
+            logging.debug("error - %s", e)
             pass
         else:
-            print site,": ",getHTMLTitle(res.read())," retrieved at ", time.ctime().split()[3], " in ", time.clock()-start_time
-
-def watchOutForMe(obj, s_methodName):
-  #this registers the object and the method name to call
-  #then check for network performance, mainly to address network resting
-  #if there is a network problem this will call the s_methodName of the object
-  if not obj in observers:
-      if obj.hasattr(s_methodName):
-        obeservers.append([obj, s_methodName])
-      else:
-        raise ValueError
-  #TODO store object in an array with the method name as a tuple
-  
-def endMyWatch(obj):
-  #this deregisters the object
-  #TODO check if the object exists
-  if obj in observers:
-  #TODO remove the object from the dictionary
-    try:
-        observers.remove(obj)
-  #TODO return result
-        pass
-    else:
-        raise ValueError
+            logging.debug("%s : %s retrieved at %s in %s", site , getHTMLTitle(res.read()), time.ctime().split()[3], time.clock()-start_time)
 
   
-def callAllWatchers():
-  #TODO go through the registered objects and call their methods
-  for observer, method in observers:
-      s_command = "{0}.{1}()".format(observer, method)
-      print "Executing {0}".format(s_command)
-      objCode = compile(s_command)
-      exec(objCode)
-
-
-def restartNetwork():
-  #TODO shutdown and restart the network service or refresh DHCP information
-  print "Restart Network"
-
-
 if __name__ == '__main__':
 
   # Get user input

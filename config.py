@@ -25,6 +25,11 @@ s_WorkingDatabase = "working"
 s_WorkingCollection = "working_rwc"
 s_WorkingResults = "working_rwc_results"
 
+LOGFILE_NAME = 'jUtils.log'
+LOGFILE_FORMAT = '%(asctime)s TweetCollector (%(filename)s):%(funcName)s:%(threadName)s: %(message)s'
+WORKING_DIR = '/home/jeremy/jUtils/'
+SCRIPT_NAME = 'bobby.py'
+SCRIPT_OUTPUT_WATCH = 'die'
 
 _debug = 0
 debug = False
