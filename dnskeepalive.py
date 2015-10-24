@@ -6,6 +6,7 @@ and the time it took to retrieve the page.
 I have written this to as a hack to keep my network interface active while
 I sleep.
 """
+import logging
 import time
 import urllib2 as urllib
 
@@ -18,31 +19,39 @@ def getHTMLTitle(s):
     return s[s.find("<title>") + len("<title>"):s.find("</title>")]
 
  
-def sleeper():
+def poller():
+    global num, site
+
     while True:
+        if not num:
+            num = i_DefaultSeconds
+        if not site:
+            site = s_TargetWeb
         # Run our time.sleep() command,
         # and show the before and after time
-        print('Waiting %s seconds' % num)
+        logging.debug('Waiting %d seconds before download', num)
         time.sleep(num)
 
         start_time = time.clock()
         try:
             res = urllib.urlopen(site)
         except (ValueError, KeyError, TypeError) as e:
-            print "error - "
-            print e
+            logging.debug("error - %s", e)
             pass
         else:
-            print site,": ",getHTMLTitle(res.read())," retrieved at ", time.ctime().split()[3], " in ", time.clock()-start_time
-    
-# Get user input
-try:
+            logging.debug("%s : %s retrieved at %s in %s", site , getHTMLTitle(res.read()), time.ctime().split()[3], time.clock()-start_time)
+
+  
+if __name__ == '__main__':
+
+  # Get user input
+  try:
     num = input('How long to wait: [{0}] '.format(i_DefaultSeconds))
-except SyntaxError:
+  except SyntaxError:
     num = i_DefaultSeconds
 
-# Try to convert it to a float
-while True:
+  # Try to convert it to a float
+  while True:
     try:
         num = float(num)
     except ValueError:
@@ -51,18 +60,18 @@ while True:
     else:
         break
     
-# get address
-site = raw_input("Please enter a site address to call: [{0}]".format(s_TargetWeb))
-if site == '':
+  # get address
+  site = raw_input("Please enter a site address to call: [{0}]".format(s_TargetWeb))
+  if site == '':
     site = s_TargetWeb
 
-# simple url prep
+  # simple url prep
 
-if not site.startswith('http'):
+  if not site.startswith('http'):
     site = "http://" + site
  
-try:
-    sleeper()
-except KeyboardInterrupt:
+  try:
+    poller()
+  except KeyboardInterrupt:
     print('\n\nKeyboard exception received. Exiting.')
     exit()
