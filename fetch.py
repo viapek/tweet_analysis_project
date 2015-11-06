@@ -74,7 +74,7 @@ def twitterreq(url, method, parameters):
 
   return response
 
-def fetchsamples(eventHandler, exitFetcher):
+def fetch(writeEvent, restartEvent):
   url = "https://stream.twitter.com/1.1/statuses/filter.json?track=" + config.s_TwitQueryString
   parameters = []
   print 'Collecting tweets for ' + config.s_TwitQueryString
@@ -82,20 +82,22 @@ def fetchsamples(eventHandler, exitFetcher):
   
   # print type(pyresponse)
   for line in response:
+      # if we receive a reset from watcher... get out
+      if restartEvent.isSet(): 
+          return
+
       if line:
           try:
-              if exitFetcher.isSet(): return
-              lineJson = json.loads(line)
+            lineJson = json.loads(line)
           except (ValueError, KeyError, TypeError) as e:
-              if len(line) != 2:
-                  print "Problem with json.loads"
-                  print "-"*50
-                  print "line length: {0}".format(len(line))
-                  print "line data: {0}".format(line)
-                  print "-"*50
-                  pass
+            if len(line) != 2:
+              print "Problem with json.loads"
+              print "-"*50
+              print "line length: {0}".format(len(line))
+              print "line data: {0}".format(line)
+              print "-"*50
+              pass
           else:
-              writeToDbase(lineJson)
-              if eventHandler:
-                  eventHandler.set()
+            writeToDbase(lineJson)
+            writeEvent.set()
             
