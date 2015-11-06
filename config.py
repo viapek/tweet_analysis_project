@@ -32,11 +32,10 @@ s_WorkingDatabase = ""
 s_WorkingCollection = ""
 s_WorkingResults = ""
 
-LOGFILE_NAME = 'jUtils.log'
+LOGFILE_NAME = ''
 LOGFILE_FORMAT = '%(asctime)s TweetCollector (%(filename)s):%(funcName)s:%(threadName)s: %(message)s'
-WORKING_DIR = '/home/jeremy/jUtils/'
-SCRIPT_NAME = 'bobby.py'
-SCRIPT_OUTPUT_WATCH = 'die'
+WORKING_DIR = ''
+SCRIPT_NAME = ''
 
 _debug = 0
 # if this is true then scripts will print progressto help identify issues
